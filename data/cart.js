@@ -1,48 +1,48 @@
-export let cart =  JSON.parse(localStorage.getItem('cart'));
+export let cart = JSON.parse(localStorage.getItem('cart'));
 
-if(!cart){
-   cart = [{
+if (!cart) {
+    cart = [{
         productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
         quantity: 2,
-       },
+    },
     {
         productId: '15b6fc6f-327a-4ec4-896f-486349e85a3d',
         quantity: 1,
     }];
 }
 
-function saveStorage(){
+function saveStorage() {
     localStorage.setItem('cart', JSON.stringify(cart))
-   }
+}
 
 export function addToCart(productId) {
-        let matchingItem;
-    
-        cart.forEach((cartItem) => {
+    let matchingItem;
+
+    cart.forEach((cartItem) => {
         if (productId === cartItem.productId) {
             matchingItem = cartItem;
         }
-        });
-        if (matchingItem) {
+    });
+    if (matchingItem) {
         matchingItem.quantity += 1;
-        }
-    
-        else {
+    }
+
+    else {
         cart.push({
             productId: productId,
             quantity: 1
         })
-        }
-
-        saveStorage();
     }
 
+    saveStorage();
+}
 
-export function removeFromCart(productId){
+
+export function removeFromCart(productId) {
     const newCart = [];
 
     cart.forEach((cartItem) => {
-        if(cartItem.productId !== productId){
+        if (cartItem.productId !== productId) {
             newCart.push(cartItem);
         }
     })
@@ -50,12 +50,25 @@ export function removeFromCart(productId){
     cart = newCart;
 
     saveStorage();
-} 
+}
 
-export function calculateCartQuantity(){
-        let cartQuantity = 0;
-        cart.forEach((cartItem) => {
+export function calculateCartQuantity() {
+    let cartQuantity = 0;
+    cart.forEach((cartItem) => {
         cartQuantity += cartItem.quantity;
-        })
+    })
     return cartQuantity;
-    }
+}
+
+export function updateQuantity(productId, newQuantity) {
+    let matchingItem;
+
+    cart.foreach((cartItem) => {
+        if (productId === cartItem.productId) {
+            matchingItem = cartItem;
+        }
+    })
+    matchingItem.quantity = newQuantity;
+
+    saveStorage();
+}
