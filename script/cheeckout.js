@@ -3,6 +3,10 @@ import { products } from '../data/products.js'
 import { formatCurrency } from './utils/money.js';
 let cartSummaryHTML = '';
 
+ hello();
+
+ console.log(dayjs())
+
 cart.forEach((cartItem) => {
 
     let productId = cartItem.productId;
