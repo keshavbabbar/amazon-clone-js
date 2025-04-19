@@ -1,9 +1,8 @@
 import { cart, removeFromCart, calculateCartQuantity, updateQuantity } from '../data/cart.js'
 import { products } from '../data/products.js'
 import { formatCurrency } from './utils/money.js';
-import { hello } from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js'
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js'
-import { deliveryOption } from '../data/deliveryItem.js';
+import { deliveryOptions } from '../data/deliveryItem.js';
 
 let cartSummaryHTML = '';
 
@@ -18,11 +17,26 @@ cart.forEach((cartItem) => {
         }
     });
 
+    const deliveryOptionId = cartItem.deliveryOptionId;
+
+    let deliveryOption;
+
+       deliveryOptions.forEach((option) => {
+        if (option.id === deliveryOptionId){
+            deliveryOption = option;
+        }     
+    });
+
+    const today = dayjs();
+    const deliveryDate = today.add(deliveryOption.deliveryDays, 'days')
+
+    const deliveryString = deliveryDate.format('dddd, MMMM D')
+
     cartSummaryHTML += `
      <div class="cart-item-container 
       js-cart-item-container-${matchingProduct.id}">
         <div class="delivery-date">
-            Delivery date: Tuesday, June 21
+            Delivery date: ${deliveryString}
         </div>
 
         <div class="cart-item-details-grid">
@@ -69,7 +83,7 @@ function deliveryOptionHTML(matchingProduct, cartItem) {
 
     let html = ''
 
-    deliveryOption.forEach((option) => {
+    deliveryOptions.forEach((option) => {
         const today = dayjs();
         const deliveryDate = today.add(option.deliveryDays, 'days')
 
