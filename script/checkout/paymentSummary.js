@@ -5,30 +5,36 @@ import { formatCurrency } from "../utils/money.js";
 
 
 export function renderPaymnetSummary() {
-    let productPriceCents = 0;
-    let shippingPriceCents = 0;
+  let productPriceCents = 0;
+  let shippingPriceCents = 0;
 
-    cart.forEach((cartItem) => {
-        const product = getProduct(cartItem.productId);
-        productPriceCents += product.priceCents * cartItem.quantity;
+  cart.forEach((cartItem) => {
+    const product = getProduct(cartItem.productId);
+    productPriceCents += product.priceCents * cartItem.quantity;
 
-        const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
-        shippingPriceCents += deliveryOption.priceCents;
-    });
+    const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
+    shippingPriceCents += deliveryOption.priceCents;
+  });
 
-    const totalBeforeTaxCents = productPriceCents + shippingPriceCents;
-    const textCents = totalBeforeTaxCents * 0.1;
-    const totalCents = totalBeforeTaxCents + textCents;
+  const totalBeforeTaxCents = productPriceCents + shippingPriceCents;
+  const textCents = totalBeforeTaxCents * 0.1;
+  const totalCents = totalBeforeTaxCents + textCents;
+
+  let cartQuantity = 0;
+
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  })
 
 
-    const paymentSummaryHTML = `
+  const paymentSummaryHTML = `
          
             <div class="payment-summary-title">
                 Order Summary
             </div> 
 
             <div class="payment-summary-row">
-                <div>Items (3):</div> 
+                <div>Items (${cartQuantity}):</div> 
                 <div class="payment-summary-money">
                   $${formatCurrency(productPriceCents)}
                 </div>
@@ -67,5 +73,5 @@ export function renderPaymnetSummary() {
             </button>
     `;
 
-    document.querySelector('.js-payment-summary').innerHTML = paymentSummaryHTML;
+  document.querySelector('.js-payment-summary').innerHTML = paymentSummaryHTML;
 }

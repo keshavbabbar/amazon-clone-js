@@ -10,6 +10,7 @@ import { products, getProduct } from '../../data/products.js'
 import { formatCurrency } from '../utils/money.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js'
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryItem.js';
+import { renderPaymnetSummary } from './paymentSummary.js';
 
 
 export function renderOrderSummary() 
@@ -61,7 +62,7 @@ export function renderOrderSummary()
                     <span class = 'save-quantity-link link-primary js-save-link'
                     data-product-id = '${matchingProduct.id}'>Save</span>
 
-                    <span class="delete-quantity-link link-primary js-delete-link" 
+                    <span class="delete-quantity-link link-primary  link" 
                     data-product-id = '${matchingProduct.id}'>
                     Delete
                     </span>
@@ -124,7 +125,8 @@ export function renderOrderSummary()
 
                 const container = document.querySelector(`.js-cart-item-container-${productId}`)
                 container.remove()
-                updateCartQuantity()
+                updateCartQuantity();
+                renderPaymnetSummary();
             });
         });
 
@@ -164,6 +166,7 @@ export function renderOrderSummary()
 
 
                 updateCartQuantity();
+                renderPaymnetSummary();
             });
         });
 
@@ -174,6 +177,7 @@ export function renderOrderSummary()
                 const { productId, deliveryOptionId } = element.dataset;
                 updateDeliveryOption(productId, deliveryOptionId);
                 renderOrderSummary();
+                renderPaymnetSummary();
             })
         })
 }
