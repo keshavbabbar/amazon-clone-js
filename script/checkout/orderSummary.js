@@ -9,8 +9,9 @@ import {
 import { products, getProduct } from '../../data/products.js'
 import { formatCurrency } from '../utils/money.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js'
-import { deliveryOptions, getDeliveryOption } from '../../data/deliveryItem.js';
+import { deliveryOptions, getDeliveryOption, calculateDeliveryDate } from '../../data/deliveryItem.js';
 import { renderPaymnetSummary } from './paymentSummary.js';
+import { renderCheckoutHeader } from './checkoutHeader.js';
 
 
 export function renderOrderSummary() 
@@ -27,10 +28,7 @@ export function renderOrderSummary()
 
         const deliveryOption = getDeliveryOption(deliveryOptionId)
 
-        const today = dayjs();
-        const deliveryDate = today.add(deliveryOption.deliveryDays, 'days')
-
-        const deliveryString = deliveryDate.format('dddd, MMMM D')
+      const deliveryString = calculateDeliveryDate(deliveryOption);
 
         cartSummaryHTML += `
         <div class="cart-item-container 
@@ -62,7 +60,7 @@ export function renderOrderSummary()
                     <span class = 'save-quantity-link link-primary js-save-link'
                     data-product-id = '${matchingProduct.id}'>Save</span>
 
-                    <span class="delete-quantity-link link-primary  link" 
+                    <span class="delete-quantity-link link-primary  js-delete-link" 
                     data-product-id = '${matchingProduct.id}'>
                     Delete
                     </span>
@@ -84,10 +82,7 @@ export function renderOrderSummary()
         let html = ''
 
         deliveryOptions.forEach((option) => {
-            const today = dayjs();
-            const deliveryDate = today.add(option.deliveryDays, 'days')
-
-            const deliveryString = deliveryDate.format('dddd, MMMM D')
+            const deliveryString = calculateDeliveryDate(option);
 
             const priceString = option.priceCents === 0 ? 'Free' : `$${formatCurrency(option.priceCents)}`;
             const isChecked = option.id === cartItem.deliveryOptionId
@@ -124,7 +119,9 @@ export function renderOrderSummary()
                 removeFromCart(productId);
 
                 const container = document.querySelector(`.js-cart-item-container-${productId}`)
-                container.remove()
+                container.remove();
+
+                renderCheckoutHeader();
                 updateCartQuantity();
                 renderPaymnetSummary();
             });
