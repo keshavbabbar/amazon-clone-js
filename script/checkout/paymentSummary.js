@@ -4,7 +4,7 @@ import { getDeliveryOption } from "../../data/deliveryItem.js";
 import { formatCurrency } from "../utils/money.js";
 
 
-export function renderPaymnetSummary() {
+export function renderPaymentSummary() {
   let productPriceCents = 0;
   let shippingPriceCents = 0;
 

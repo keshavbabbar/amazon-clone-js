@@ -10,7 +10,7 @@ import { products, getProduct } from '../../data/products.js'
 import { formatCurrency } from '../utils/money.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js'
 import { deliveryOptions, getDeliveryOption, calculateDeliveryDate } from '../../data/deliveryItem.js';
-import { renderPaymnetSummary } from './paymentSummary.js';
+import { renderPaymentSummary } from './paymentSummary.js';
 import { renderCheckoutHeader } from './checkoutHeader.js';
 
 
@@ -110,7 +110,7 @@ export function renderOrderSummary()
         return html;
     }
 
-    document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML
+    document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
 
     document.querySelectorAll('.js-delete-link')
         .forEach((link) => {
@@ -123,15 +123,20 @@ export function renderOrderSummary()
 
                 renderCheckoutHeader();
                 updateCartQuantity();
-                renderPaymnetSummary();
+                renderPaymentSummary();
             });
         });
 
 
-    function updateCartQuantity() {
-        const cartQuantity = calculateCartQuantity();
-        document.querySelector('.js-return-to-home-link').innerHTML = `${cartQuantity} items`;
-    }
+  function updateCartQuantity() {
+  const cartQuantity = calculateCartQuantity();
+  const returnToHomeLink = document.querySelector('.js-return-to-home-link');
+  
+  if (returnToHomeLink) {
+    returnToHomeLink.innerHTML = `${cartQuantity} items`;
+  }
+}
+
     updateCartQuantity();
 
     document.querySelectorAll('.js-update-link')
@@ -163,7 +168,7 @@ export function renderOrderSummary()
 
 
                 updateCartQuantity();
-                renderPaymnetSummary();
+                renderPaymentSummary();
             });
         });
 
@@ -174,7 +179,7 @@ export function renderOrderSummary()
                 const { productId, deliveryOptionId } = element.dataset;
                 updateDeliveryOption(productId, deliveryOptionId);
                 renderOrderSummary();
-                renderPaymnetSummary();
+                renderPaymentSummary();
             })
         })
 }

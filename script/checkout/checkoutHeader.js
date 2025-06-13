@@ -6,7 +6,7 @@
 
     cart.forEach((cartItem) => {
         cartQuantity += cartItem.quantity;
-    })
+    });
 
     const checkoutHeaderHTML = `
         <div class="header-content">
