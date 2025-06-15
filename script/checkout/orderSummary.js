@@ -14,8 +14,7 @@ import { renderPaymentSummary } from './paymentSummary.js';
 import { renderCheckoutHeader } from './checkoutHeader.js';
 
 
-export function renderOrderSummary() 
-{
+export function renderOrderSummary() {
     let cartSummaryHTML = '';
 
     cart.forEach((cartItem) => {
@@ -28,7 +27,7 @@ export function renderOrderSummary()
 
         const deliveryOption = getDeliveryOption(deliveryOptionId)
 
-      const deliveryString = calculateDeliveryDate(deliveryOption);
+        const deliveryString = calculateDeliveryDate(deliveryOption);
 
         cartSummaryHTML += `
         <div class="cart-item-container 
@@ -43,10 +42,10 @@ export function renderOrderSummary()
                 src="${matchingProduct.image}">
 
                 <div class="cart-item-details">
-                <div class="product-name">
+                <div class="product-name js-product-name-${matchingProduct.id}">
                 ${matchingProduct.name}
                 </div>
-                <div class="product-price">
+                <div class="product-price js-product-price-${matchingProduct.id}">
                     $${formatCurrency(matchingProduct.priceCents)}
                 </div>
                 <div class="product-quantity
@@ -91,12 +90,15 @@ export function renderOrderSummary()
             const isChecked = option.id === cartItem.deliveryOptionId
 
             html += `
-                <div class="delivery-option js-delivery-option"
+                <div class="delivery-option js-delivery-option
+                  js-delivery-option-${matchingProduct.id}-${option.id}"
                 data-product-id = "${matchingProduct.id}"
                 data-delivery-option-id = "${option.id}">
                 <input type="radio"
             ${isChecked ? 'checked' : ''}
-                class="delivery-option-input"
+                 class="delivery-option-input
+                 js-delivery-option-input-${matchingProduct.id}-${option.id}"
+
                 name="delivery-option-${matchingProduct.id}">
                 <div>
                 <div class="delivery-option-date">
@@ -124,22 +126,22 @@ export function renderOrderSummary()
                 const container = document.querySelector(`.js-cart-item-container-${productId}`)
                 container.remove();
 
-               
-             renderCheckoutHeader();
+
+                renderCheckoutHeader();
                 updateCartQuantity();
                 renderPaymentSummary();
             });
         });
 
 
-  function updateCartQuantity() {
-  const cartQuantity = calculateCartQuantity();
-  const returnToHomeLink = document.querySelector('.js-return-to-home-link');
-  
-  if (returnToHomeLink) {
-    returnToHomeLink.innerHTML = `${cartQuantity} items`;
-  }
-}
+    function updateCartQuantity() {
+        const cartQuantity = calculateCartQuantity();
+        const returnToHomeLink = document.querySelector('.js-return-to-home-link');
+
+        if (returnToHomeLink) {
+            returnToHomeLink.innerHTML = `${cartQuantity} items`;
+        }
+    }
 
     updateCartQuantity();
 

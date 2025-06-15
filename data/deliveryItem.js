@@ -16,7 +16,7 @@ export let deliveryOptions = [{
 
 
 
-export function getDeliveryOption(deliveryOptionId){
+export function getDeliveryOption(deliveryOptionId) {
     let deliveryOption;
 
     deliveryOptions.forEach((option) => {
@@ -24,29 +24,41 @@ export function getDeliveryOption(deliveryOptionId){
             deliveryOption = option;
         }
     });
-    
+
     return deliveryOption || deliveryOptions[0];
 }
 
-function isWeekend(date){
+export function validDeliveryOption(deliveryOptionId) {
+    let found = false;
+
+    deliveryOptions.forEach((option) => {
+        if (option.id === deliveryOptionId) {
+            found = true;
+        }
+    });
+
+    return found;
+}
+
+function isWeekend(date) {
     const dayOfWeek = date.format('dddd');
     return dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday';
 }
 
-export function calculateDeliveryDate(deliveryOption){
-      const today = dayjs();
-       
-      let remainingDays = deliveryOption.deliveryDays;
-      let deliveryDate = dayjs();
-             
-      while (remainingDays > 0){
+export function calculateDeliveryDate(deliveryOption) {
+    const today = dayjs();
+
+    let remainingDays = deliveryOption.deliveryDays;
+    let deliveryDate = dayjs();
+
+    while (remainingDays > 0) {
         deliveryDate = deliveryDate.add(1, 'day');
 
-        if(!isWeekend(deliveryDate)){
+        if (!isWeekend(deliveryDate)) {
             remainingDays--;
         }
-      }
-            const deliveryString = deliveryDate.format('dddd, MMMM D');
+    }
+    const deliveryString = deliveryDate.format('dddd, MMMM D');
 
-            return deliveryString
+    return deliveryString
 }
